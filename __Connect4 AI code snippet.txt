@@ -1,0 +1,673 @@
+public void playerBlackStrategy(){
+        
+        //leave these top 4 lines at the top
+        playerBlack = "Sashka";  //put player1 name here
+        showText(playerBlack,70,100); //shows your name
+        GreenfootImage image1 = new GreenfootImage("black.png"); //sets image to black checker
+        String colorInitial = new String("b"); //fills the 2d array grid with this value
+        
+        int colToPlace = 0;
+        
+        if (turnCounter < 120){
+            colToPlace = 3;
+        } else if (turnCounter > 120 && (check3R() != -1)){
+            colToPlace = check3R();
+        } else if (check3B() != -1){
+            colToPlace = check3B();
+        } else {
+            colToPlace = (int)(Math.random()*7);
+        }
+        
+        placeCol(colToPlace,colorInitial,image1);  //plays in the specified col and fills the 2D array with the 2nd parameter String
+        
+        
+    }
+    
+public int check3B(){
+        
+        String checkersAsAString = new String();
+        
+        //check each row for a winner, starting at bottom
+        for(int r = grid.length - 1; r >= 0; r--){
+            checkersAsAString = ""; //reset String for each row
+            for(int c = 0; c < grid[0].length; c++){
+                if(grid[r][c] == null)
+                    checkersAsAString+="-";//adds dash to the String if cell is empty
+                else{
+                    checkersAsAString+= grid[r][c]; //adds player initial to String
+                    if(checkersAsAString.contains(playerRedInitial+playerRedInitial+playerRedInitial))
+                   {
+                        if ((c - 1) > -1 && grid[r][c - 1] == null){
+                            return c - 1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        //check each column for a winner
+        for(int c = 0; c < grid[0].length; c++){
+            checkersAsAString = "";  //reset String for each column
+            for(int r = grid.length - 1; r >= 0; r--){
+                if(grid[r][c] == null)
+                    checkersAsAString+="-"; //adds dash to the String if cell is empty
+                else{
+                    checkersAsAString+= grid[r][c]; //adds the initial to the String
+                    if(checkersAsAString.contains(playerRedInitial+playerRedInitial+playerRedInitial))
+                   {
+                        if ((r - 1) > -1 && grid[r - 1][c] == null){
+                            return c;
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        //checks for diagonal winner
+        //this checks for diagonal starting at bottom right, moving to top left
+        String diag1 = new String();  //Six new Strings to be built
+        String diag2 = new String();  //for each possible diagonal to win 
+        String diag3 = new String();
+        String diag4 = new String();
+        String diag5 = new String();
+        String diag6 = new String();
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c < grid[0].length; c++){
+                
+                if(r-c==2){ //checks two diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag1 += "-"; //adds a dash if cell is blank
+                    else{
+                         diag1 += grid[r][c]; //adds the player initial to String
+                    }
+                }
+                
+                if(r-c==1){ //checks one diagonal below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag2 += "-"; //adds a dash if cell is blank
+                    else{
+                         diag2 += grid[r][c];  //adds the player initial to String
+                        
+                    }
+                }
+                
+                if(r-c==0){//checks the middle diagonal
+                    if(grid[r][c] == null)
+                         diag3 += "-";
+                    else{
+                         diag3 += grid[r][c];
+                         
+                    }
+                }
+                
+                if(r-c==-1){ //checks one diagonal above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag4 += "-";
+                    else{
+                         diag4 += grid[r][c];
+                         
+                    }
+                }
+                
+                if(r-c==-2){ //checks two diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag5 += "-";
+                    else{
+                         diag5 += grid[r][c];
+                          
+                    }
+                }
+                
+                if(r-c==-3){  //checks three diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                        diag6 += "-";
+                    else{
+                        diag6 += grid[r][c];
+                        
+                     }
+                }
+                
+                
+            }
+            
+            
+        }
+        
+        //checking eah diagonal for placements
+         if (diag1.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+            if (grid[2][0] == null){
+                return 0;
+            } else if (grid[5][3] == null){
+                return 3; 
+            }
+         }
+          else if (diag2.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+            if (grid[2][1] == null){
+                return 1;
+            }else if (grid[4][3] == null){
+                return 3;
+            } else if (grid[5][4] == null){
+                return 4;
+            } else if (grid[1][0] == null){
+                 return 0;
+            } 
+         }
+         else if (diag3.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[2][2] == null){
+                                return 2;
+                            } else if (grid[3][3] == null){
+                                return 2;
+                            } else if (grid[4][4] == null){
+                                return 4;
+                            } else if (grid[1][1] == null){
+                                return 1;
+                            } else if (grid[5][5] == null){
+                                return 5;
+                            }else if (grid[0][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag4.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[2][3] == null){
+                                return 3;
+                            } else if (grid[3][4] == null){
+                                return 4;
+                            } else if (grid[4][5] == null){
+                                return 5;
+                            } else if (grid[1][2] == null){
+                                return 2;
+                            } else if (grid[5][6] == null){
+                                return 6;
+                            }else if (grid[0][1] == null){
+                                 return 1;
+                            }
+                        }
+         else if (diag5.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                             if (grid[1][3] == null){
+                                return 3;
+                            } else if (grid[3][5] == null){
+                                return 5;
+                            } else if (grid[4][6] == null){
+                                return 6;
+                            }else  if (grid[0][2] == null){
+                                 return 2;
+                            } 
+                        }
+         else if (diag6.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                             if (grid[0][3] == null){
+                                 return 3;
+                            } else if (grid[1][4] == null){
+                                return 4;
+                            }
+                        }
+        
+        //reset diagonal Strings so we can now check for diagonal wins starting
+        //at bottom left moving up to top right
+        diag1="";
+        diag2="";
+        diag3="";
+        diag4="";
+        diag5="";
+        diag6="";
+        //check for diagonal wins starting
+        //at bottom left moving up to top right
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c < grid[0].length; c++){
+                
+                if(r+c==3){ //checks the diagonal 2 diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag1 += "-";
+                    else{
+                         diag1 += grid[r][c]; //adds the player initial to String
+                         
+                    }
+                }
+                
+                if(r+c==4){  //checks the diagonal 1 diagonal above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag2 += "-";
+                    else
+                         diag2 += grid[r][c];
+                }
+                
+                if(r+c==5){  ////checks the middle diagonal 
+                    if(grid[r][c] == null)
+                         diag3 += "-";
+                    else
+                         diag3 += grid[r][c];
+                }
+                
+                if(r+c==6){ //checks the diagonal 1 diagonal below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag4 += "-";
+                    else
+                         diag4 += grid[r][c];
+                }
+                
+                if(r+c==7){ //checks the diagonal 2 diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag5 += "-";
+                    else
+                         diag5 += grid[r][c];
+                }
+                
+                if(r+c==8){  //checks the diagonal 3 diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag6 += "-";
+                    else
+                         diag6 += grid[r][c];
+                }
+            }
+        }
+        
+        if (diag1.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+             if (grid[3][0] == null){
+                 return 0;
+             } else if (grid[0][3] == null){
+                 return 3;
+                
+             }
+         }
+          else if (diag2.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[3][1] == null){
+                                return 1;
+                            } else if (grid[1][3] == null){
+                                return 3;
+                            } else if (grid[0][4] == null){
+                                return 4;
+                            }else if (grid[4][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag3.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[3][2] == null){
+                                return 2;
+                            } else if (grid[2][3] == null){
+                                return 2;
+                            } else if (grid[1][4] == null){
+                                return 4;
+                            } else if (grid[4][1] == null){
+                                return 1;
+                            } else if (grid[0][5] == null){
+                                return 5;
+                            } else if (grid[5][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag4.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[3][3] == null){
+                                return 3;
+                            } else if (grid[2][4] == null){
+                                return 4;
+                            } else if (grid[1][5] == null){
+                                return 5;
+                            } else if (grid[4][2] == null){
+                                return 2;
+                            } else if (grid[0][6] == null){
+                                return 6;
+                            }else if (grid[5][1] == null){
+                                 return 1;
+                            }
+                        }
+         else if (diag5.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                            if (grid[4][3] == null){
+                                return 3;
+                            } else if (grid[2][5] == null){
+                                return 5;
+                            } else if (grid[1][6] == null){
+                                return 6;
+                            }else if (grid[5][2] == null){
+                                 return 2;
+                            }
+                        }
+         else if (diag6.contains(playerRedInitial+playerRedInitial+playerRedInitial)){
+                             if (grid[5][3] == null){
+                                 return 3;
+                            } else if (grid[2][4] == null){
+                                return 4;
+                            }
+                        }
+        
+        return -1; //returns null if there is no winner
+    
+    }
+    
+public int check3R(){
+        
+        //easier to build a String from the 2d array grid, and then check for consecutive initials
+        String checkersAsAString = new String();
+       
+        //check each row for a winner, starting at bottom
+        for(int r = grid.length - 1; r >= 0; r--){
+            checkersAsAString = ""; //reset String for each row
+            for(int c = 0; c < grid[0].length; c++){
+                if(grid[r][c] == null)
+                    checkersAsAString+="-";//adds dash to the String if cell is empty
+                else{
+                    checkersAsAString+= grid[r][c]; //adds player initial to String
+                    if(checkersAsAString.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial))
+                   {
+                        if ((c - 1) > -1 && grid[r][c - 1] == null){
+                            return c - 1; 
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        //check each column for a winner
+        for(int c = 0; c < grid[0].length; c++){
+            checkersAsAString = "";  //reset String for each column
+            for(int r = grid.length - 1; r >= 0; r--){
+                if(grid[r][c] == null)
+                    checkersAsAString+="-"; //adds dash to the String if cell is empty
+                else{
+                    checkersAsAString+= grid[r][c]; //adds the initial to the String
+                    if(checkersAsAString.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial))
+                    {
+                        if ((r - 1) > -1 && grid[r - 1][c] == null){
+                            return c;
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        //checks for diagonal winner
+        //this checks for diagonal starting at bottom right, moving to top left
+        String diag1 = new String();  //Six new Strings to be built
+        String diag2 = new String();  //for each possible diagonal to win 
+        String diag3 = new String();
+        String diag4 = new String();
+        String diag5 = new String();
+        String diag6 = new String();
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c < grid[0].length; c++){
+                
+                if(r-c==2){ //checks two diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag1 += "-"; //adds a dash if cell is blank
+                    else{
+                         diag1 += grid[r][c]; //adds the player initial to String
+                    }
+                }
+                
+                if(r-c==1){ //checks one diagonal below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag2 += "-"; //adds a dash if cell is blank
+                    else{
+                         diag2 += grid[r][c];  //adds the player initial to String
+                        
+                    }
+                }
+                
+                if(r-c==0){//checks the middle diagonal
+                    if(grid[r][c] == null)
+                         diag3 += "-";
+                    else{
+                         diag3 += grid[r][c];
+                         
+                    }
+                }
+                
+                if(r-c==-1){ //checks one diagonal above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag4 += "-";
+                    else{
+                         diag4 += grid[r][c];
+                         
+                    }
+                }
+                
+                if(r-c==-2){ //checks two diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag5 += "-";
+                    else{
+                         diag5 += grid[r][c];
+                          
+                    }
+                }
+                
+                if(r-c==-3){  //checks three diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag6 += "-";
+                    else{
+                         diag6 += grid[r][c];
+                        
+                     }
+                }
+                
+                
+            }
+            
+            
+        }
+        
+        //checking eah diagonal for placements
+         if (diag1.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+             if (grid[2][0] == null){
+                 return 0;
+             } else if (grid[5][3] == null){
+                 return 3;  
+             }
+         }
+          else if (diag2.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                             if (grid[2][1] == null){
+                                 return 1;
+                            }else if (grid[4][3] == null){
+                                return 3;
+                            } else if (grid[5][4] == null){
+                                return 4;
+                            } else if (grid[1][0] == null){
+                                return 0;
+                            } 
+                        }
+         else if (diag3.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[2][2] == null){
+                                return 2;
+                            } else if (grid[3][3] == null){
+                                return 2;
+                            } else if (grid[4][4] == null){
+                                return 4;
+                            } else if (grid[1][1] == null){
+                                return 1;
+                            } else if (grid[5][5] == null){
+                                return 5;
+                            }else if (grid[0][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag4.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[2][3] == null){
+                                return 3;
+                            } else if (grid[3][4] == null){
+                                return 4;
+                            } else if (grid[4][5] == null){
+                                return 5;
+                            } else if (grid[1][2] == null){
+                                return 2;
+                            } else if (grid[5][6] == null){
+                                return 6;
+                            }else if (grid[0][1] == null){
+                                 return 1;
+                            }
+                        }
+         else if (diag5.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                             if (grid[1][3] == null){
+                                return 3;
+                            } else if (grid[3][5] == null){
+                                return 5;
+                            } else if (grid[4][6] == null){
+                                return 6;
+                            }else  if (grid[0][2] == null){
+                                 return 2;
+                            } 
+                        }
+         else if (diag6.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                             if (grid[0][3] == null){
+                                 return 3;
+                            } else if (grid[1][4] == null){
+                                return 4;
+                            }
+                        }
+        
+        //reset diagonal Strings so we can now check for diagonal wins starting
+        //at bottom left moving up to top right
+        diag1="";
+        diag2="";
+        diag3="";
+        diag4="";
+        diag5="";
+        diag6="";
+        //check for diagonal wins starting
+        //at bottom left moving up to top right
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c < grid[0].length; c++){
+                
+                if(r+c==3){ //checks the diagonal 2 diagonals above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag1 += "-";
+                    else{
+                         diag1 += grid[r][c]; //adds the player initial to String
+                         
+                    }
+                }
+                
+                if(r+c==4){  //checks the diagonal 1 diagonal above the middle diagonal
+                    if(grid[r][c] == null)
+                         diag2 += "-";
+                    else
+                         diag2 += grid[r][c];
+                }
+                
+                if(r+c==5){  ////checks the middle diagonal 
+                    if(grid[r][c] == null)
+                         diag3 += "-";
+                    else
+                         diag3 += grid[r][c];
+                }
+                
+                if(r+c==6){ //checks the diagonal 1 diagonal below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag4 += "-";
+                    else
+                         diag4 += grid[r][c];
+                }
+                
+                if(r+c==7){ //checks the diagonal 2 diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag5 += "-";
+                    else
+                         diag5 += grid[r][c];
+                }
+                
+                if(r+c==8){  //checks the diagonal 3 diagonals below the middle diagonal
+                    if(grid[r][c] == null)
+                         diag6 += "-";
+                    else
+                         diag6 += grid[r][c];
+                }
+            }
+        }
+        
+        if (diag1.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+             if (grid[3][0] == null){
+                 return 0;
+             } else if (grid[0][3] == null){
+                 return 3;
+                
+             }
+         }
+          else if (diag2.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[3][1] == null){
+                                return 1;
+                            } else if (grid[1][3] == null){
+                                return 3;
+                            } else if (grid[0][4] == null){
+                                return 4;
+                            }else if (grid[4][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag3.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[3][2] == null){
+                                return 2;
+                            } else if (grid[2][3] == null){
+                                return 2;
+                            } else if (grid[1][4] == null){
+                                return 4;
+                            } else if (grid[4][1] == null){
+                                return 1;
+                            } else if (grid[0][5] == null){
+                                return 5;
+                            } else if (grid[5][0] == null){
+                                 return 0;
+                            }
+                        }
+         else if (diag4.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[3][3] == null){
+                                return 3;
+                            } else if (grid[2][4] == null){
+                                return 4;
+                            } else if (grid[1][5] == null){
+                                return 5;
+                            } else if (grid[4][2] == null){
+                                return 2;
+                            } else if (grid[0][6] == null){
+                                return 6;
+                            }else if (grid[5][1] == null){
+                                 return 1;
+                            }
+                        }
+         else if (diag5.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                            if (grid[4][3] == null){
+                                return 3;
+                            } else if (grid[2][5] == null){
+                                return 5;
+                            } else if (grid[1][6] == null){
+                                return 6;
+                            }else if (grid[5][2] == null){
+                                 return 2;
+                            }
+                        }
+         else if (diag6.contains(playerBlackInitial+playerBlackInitial+playerBlackInitial)){
+                             if (grid[5][3] == null){
+                                 return 3;
+                            } else if (grid[2][4] == null){
+                                return 4;
+                            }
+                        }
+        
+        return -1; //returns null if there is no winner
+    
+    }
+    
+    
+    public void playerRedStrategy(){
+        //leave these top 3 lines at the top
+        
+        
+        playerRed = "Sashka";  //put your name here
+        showText(playerRed,getWidth()-70,100); //shows your name
+        GreenfootImage image2 = new GreenfootImage("red.png");  //sets image to red checker
+        String colorInitial = new String("r");  //fills the 2d array grid with this value
+        
+        int colToPlace = 0;
+        
+        //first to play
+        if (turnCounter < 120){
+            colToPlace = 3;
+        } else if (turnCounter > 120 && check3B() != -1){
+            colToPlace = check3B();
+        } else if (check3R() != -1){
+            colToPlace = check3R();
+        } else {
+            colToPlace = (int)(Math.random()*7);
+        }
+        placeCol(colToPlace,colorInitial,image2);  //plays in the specified col and fills the 2D array with the 2nd parameter String
+         
+    }
